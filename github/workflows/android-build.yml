@@ -12,20 +12,20 @@ jobs:
 
     steps:
       - name: 🧱 Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: ⚙️ Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          # 👇 Désactive le cache des dépendances (sinon erreur lock file)
-          cache: 'none'
+      - name: ⚙️ Install Node.js manually (no cache, no lock)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm
+          node -v
+          npm -v
 
       - name: 🧩 Install dependencies (ignore lock file)
         run: |
           npm install --legacy-peer-deps || true
 
-      - name: 📱 Set up JDK
+      - name: 📱 Set up Java JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -38,7 +38,7 @@ jobs:
           ./gradlew assembleDebug
 
       - name: 📦 Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Rapport_de_vol_Tunisair
           path: android/app/build/outputs/apk/debug/app-debug.apk
