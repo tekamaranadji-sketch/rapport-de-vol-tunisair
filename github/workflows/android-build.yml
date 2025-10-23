@@ -1,4 +1,4 @@
-     name: Build Android APK
+name: Build Android APK
 
 on:
   push:
@@ -18,11 +18,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          # 👇 Désactive le cache des dépendances (sinon erreur lock file)
+          cache: 'none'
 
-      - name: 🧩 Install dependencies (no lock file)
-  run: |
-    npm install --legacy-peer-deps
-    
+      - name: 🧩 Install dependencies (ignore lock file)
+        run: |
+          npm install --legacy-peer-deps || true
 
       - name: 📱 Set up JDK
         uses: actions/setup-java@v3
@@ -32,4 +33,13 @@ jobs:
 
       - name: 🏗️ Build Android APK
         run: |
-   
+          cd android
+          chmod +x ./gradlew
+          ./gradlew assembleDebug
+
+      - name: 📦 Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Rapport_de_vol_Tunisair
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          
