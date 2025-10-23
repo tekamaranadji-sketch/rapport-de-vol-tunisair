@@ -2,9 +2,7 @@ name: 📱 Build Rapport de vol Tunisair APK
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -42,10 +40,12 @@ jobs:
       - name: 🤖 Build Android APK
         run: |
           cd android
+          chmod +x ./gradlew
           ./gradlew assembleDebug
 
-      - name: 📤 Upload APK artifact
+      - name: 📤 Upload generated APK
         uses: actions/upload-artifact@v4
         with:
           name: Rapport_de_vol_Tunisair.apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          
