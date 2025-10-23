@@ -19,10 +19,10 @@ jobs:
         with:
           node-version: '18'
 
-      - name: 🧩 Install dependencies
-        run: |
-          npm install --package-lock-only || true
-          npm install
+      - name: 🧩 Install dependencies (no lock file)
+  run: |
+    npm install --legacy-peer-deps
+    
 
       - name: 📱 Set up JDK
         uses: actions/setup-java@v3
