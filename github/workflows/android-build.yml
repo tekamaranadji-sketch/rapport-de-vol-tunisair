@@ -81,4 +81,3 @@ jobs:
         with:
           name: Rapport_de_vol_Tunisair-Release-${{ github.run_number }}-${{ github.sha }}
           path: android/app/build/outputs/apk/release/app-release.apk
-          
