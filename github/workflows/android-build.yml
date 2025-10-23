@@ -1,53 +1,35 @@
-name: 📱 Build Rapport de vol Tunisair APK
+     name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📦 Checkout repository
-        uses: actions/checkout@v4
+      - name: 🧱 Checkout repository
+        uses: actions/checkout@v3
 
-      - name: ⚙️ Setup Node.js
-        uses: actions/setup-node@v4
+      - name: ⚙️ Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-            - name: 🧩 Install dependencies
+      - name: 🧩 Install dependencies
         run: |
           npm install --package-lock-only || true
           npm install
 
-
-      - name: 🏗️ Build web app
-        run: |
-          npm run build
-
-      - name: 🔌 Setup Capacitor Android project
-        run: |
-          npx cap sync android
-
-      - name: ☕ Setup Java
-        uses: actions/setup-java@v4
+      - name: 📱 Set up JDK
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🤖 Build Android APK
+      - name: 🏗️ Build Android APK
         run: |
-          cd android
-          chmod +x ./gradlew
-          ./gradlew assembleDebug
-
-      - name: 📤 Upload generated APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Rapport_de_vol_Tunisair.apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          
+   
