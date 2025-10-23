@@ -19,9 +19,11 @@ jobs:
         with:
           node-version: '18'
 
-      - name: 🧩 Install dependencies
+            - name: 🧩 Install dependencies
         run: |
+          npm install --package-lock-only || true
           npm install
+
 
       - name: 🏗️ Build web app
         run: |
