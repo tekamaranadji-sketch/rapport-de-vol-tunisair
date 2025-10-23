@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android Release APK
 
 on:
   push:
@@ -20,16 +20,25 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🏗️ Build Android APK with Gradle only
+      - name: 🔑 Setup Keystore
+        run: |
+          mkdir -p android/app
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/my-release-key.jks
+
+      - name: 🏗️ Build Release APK
         run: |
           cd android
           chmod +x ./gradlew
           ./gradlew clean
-          ./gradlew assembleDebug
+          ./gradlew assembleRelease -Pandroid.injected.signing.store.file=app/my-release-key.jks \
+                                    -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+                                    -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+                                    -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} \
+                                    --no-daemon --stacktrace
 
       - name: 📦 Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Rapport_de_vol_Tunisair
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: Rapport_de_vol_Tunisair-Release-${{ github.run_number }}-${{ github.sha }}
+          path: android/app/build/outputs/apk/release/app-release.apk
           
